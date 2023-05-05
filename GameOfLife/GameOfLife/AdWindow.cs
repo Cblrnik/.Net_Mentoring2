@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Windows;
+using System.Windows.Documents;
 using System.Windows.Input;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -12,7 +14,7 @@ namespace GameOfLife
         private readonly DispatcherTimer adTimer;
         private int imgNmb;     // the number of the image currently shown
         private string link;    // the URL where the currently shown ad leads to
-        
+        private readonly List<BitmapImage> images = new List<BitmapImage>();
     
         public AdWindow(Window owner)
         {
@@ -28,6 +30,7 @@ namespace GameOfLife
             MouseDown += OnClick;
             
             imgNmb = rnd.Next(1, 3);
+            InitializeImages();
             ChangeAds(this, new EventArgs());
 
             // Run the timer that changes the ad's image 
@@ -35,10 +38,13 @@ namespace GameOfLife
             adTimer.Interval = TimeSpan.FromSeconds(3);
             adTimer.Tick += ChangeAds;
             adTimer.Start();
-            Closing += (e, t) =>
+            
+            void InitializeImages()
             {
-                OnClosed(t);
-            };
+                images.Add(new BitmapImage(new Uri("ad1.jpg", UriKind.Relative)));
+                images.Add(new BitmapImage(new Uri("ad2.jpg", UriKind.Relative)));
+                images.Add(new BitmapImage(new Uri("ad3.jpg", UriKind.Relative)));
+            }
         }
 
         private void OnClick(object sender, MouseButtonEventArgs e)
@@ -66,22 +72,20 @@ namespace GameOfLife
             switch (imgNmb)
             {
                 case 1:
-                    myBrush.ImageSource =
-                        new BitmapImage(new Uri("ad1.jpg", UriKind.Relative));
+                    myBrush.ImageSource = images[0];
+                        ;
                     Background = myBrush;
                     link = "http://example.com";
                     imgNmb++;
                     break;
                 case 2:
-                    myBrush.ImageSource =
-                        new BitmapImage(new Uri("ad2.jpg", UriKind.Relative));
+                    myBrush.ImageSource = images[1];
                     Background = myBrush;
                     link = "http://example.com";
                     imgNmb++;
                     break;
                 case 3:
-                    myBrush.ImageSource =
-                        new BitmapImage(new Uri("ad3.jpg", UriKind.Relative));
+                    myBrush.ImageSource = images[2];
                     Background = myBrush;
                     link = "http://example.com";
                     imgNmb = 1;
