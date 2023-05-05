@@ -1,5 +1,7 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading;
 using Confluent.Kafka;
 
@@ -19,6 +21,7 @@ namespace MainProcessingService
                 BootstrapServers = BootstrapServers,
                 AutoOffsetReset = AutoOffsetReset.Latest,
             };
+            var transferredFiles = new Dictionary<string, List<byte>>();
 
             try
             {
@@ -28,6 +31,7 @@ namespace MainProcessingService
 
                 try
                 {
+                    Console.WriteLine("Service started");
                     while (true)
                     {
                         var consumer = consumerBuilder.Consume
@@ -36,16 +40,29 @@ namespace MainProcessingService
                         if (!(consumer is { Message: { } })) continue;
 
                         var message = consumer.Message;
-                        var file = message.Value;
 
-                        var fileStream = File.Create($"D:\\Mentoring\\MainProcessingService\\bin\\Debug\\Test\\{message.Key}");
+                        var fileName = ParseKey(message.Key, out var size, out var position);
 
-                        fileStream.Write(file,
-                            0, file.Length);
+                        var content = message.Value;
 
-                        fileStream.Close();
+                        if (!transferredFiles.ContainsKey(fileName))
+                        {
+                            transferredFiles.Add(fileName, new List<byte>(content));
+                        }
+                        else
+                        {
+                            transferredFiles[fileName] = new List<byte>(transferredFiles[fileName].Concat(content));
+                        }
 
-                        Console.WriteLine($"File {message.Key} was delivered");
+                        if (size == position)
+                        {
+                            var fileStream = File.Create($"D:\\Mentoring\\MainProcessingService\\bin\\Debug\\Test\\{fileName}");
+
+                            var fileData = transferredFiles.GetValueOrDefault(fileName)?.ToArray();
+                            if (fileData != null) fileStream.Write(fileData, 0, fileData.Length);
+                            fileStream.Close();
+                            Console.WriteLine($"File {message.Key} was delivered");
+                        }
                     }
                 }
                 catch (OperationCanceledException)
@@ -57,6 +74,16 @@ namespace MainProcessingService
             {
                 Console.WriteLine(ex.Message);
             }
+        }
+
+        private static string ParseKey(string key, out int size, out int position)
+        {
+            var chunk = key.Split("||");
+
+            size = int.Parse(chunk[2]);
+            position = int.Parse(chunk[1]);
+
+            return chunk[0];
         }
     }
 }

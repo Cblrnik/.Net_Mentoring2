@@ -22,6 +22,7 @@ namespace DataCaptureService
 
         public void StartWatching()
         {
+            Console.WriteLine("Service started");
             _watcher.EnableRaisingEvents = true;
         }
 

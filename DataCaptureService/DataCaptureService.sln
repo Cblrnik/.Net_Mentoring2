@@ -3,9 +3,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.4.33110.190
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataCaptureService", "DataCaptureService.csproj", "{A1C151BF-5C13-4094-91F7-5803B570F484}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataCaptureService", "DataCaptureService.csproj", "{A1C151BF-5C13-4094-91F7-5803B570F484}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MainProcessingService", "..\MainProcessingService\MainProcessingService.csproj", "{B694A7E5-87C0-4E52-B63B-3B90E2200543}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MainProcessingService", "..\MainProcessingService\MainProcessingService.csproj", "{B694A7E5-87C0-4E52-B63B-3B90E2200543}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

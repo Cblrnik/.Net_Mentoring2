@@ -7,7 +7,7 @@ namespace DataCaptureService
         static void Main(string[] args)
         {
 
-            var watcher = new FolderWatcher("D:\\Mentoring\\DataCaptureService\\bin\\Debug\\Test");
+            var watcher = new FolderWatcher("D:\\NetMentoring\\DataCaptureService\\bin\\Debug\\Test");
             var producer = new Producer(watcher);
             watcher.StartWatching();
 
