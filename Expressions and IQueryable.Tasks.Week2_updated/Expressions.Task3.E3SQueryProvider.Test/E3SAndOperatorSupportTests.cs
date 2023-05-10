@@ -32,11 +32,11 @@ namespace Expressions.Task3.E3SQueryProvider.Test
             Expression<Func<IQueryable<EmployeeEntity>, IQueryable<EmployeeEntity>>> expression
                 = query => query.Where(e => e.Workstation == "EPRUIZHW006" && e.Manager.StartsWith("John"));
 
-            var obj = translator.Translate(expression);
+            var translatedQuery = translator.Translate(expression);
 
             var requestGenerator = new FtsRequestGenerator(BaseUrl);
 
-            var request = requestGenerator.GenerateRequestUrl<EmployeeEntity>(obj, 0, 20);
+            var request = requestGenerator.GenerateRequestUrl<EmployeeEntity>(translatedQuery, 0, 20);
 
             Assert.Contains("%7B%22query%22%3A%22Manager%3A(John*)%22%7D%5D", request.AbsoluteUri);
             Assert.Contains("%7B%22query%22%3A%22Workstation%3A(EPRUIZHW006)%22%7D", request.AbsoluteUri);
