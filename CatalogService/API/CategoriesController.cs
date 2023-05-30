@@ -17,7 +17,6 @@ namespace CatalogService.API
         }
 
         [HttpGet]
-        [Route("get")]
         public IActionResult GetCategories(int? count)
         {
             if (count != null)
@@ -33,7 +32,7 @@ namespace CatalogService.API
         }
 
         [HttpGet]
-        [Route("find")]
+        [Route("id={id}")]
         public IActionResult GetCategory(int id)
         {
             var category = _service.GetEntity(id);
@@ -47,21 +46,21 @@ namespace CatalogService.API
             }
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         public IActionResult Create(Category category)
         {
             _service.CreateEntity(category);
             return this.Ok(category.CategoryId);
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete]
         public IActionResult Delete(int id)
         {
             _service.DeleteEntity(id);
             return this.Ok(id);
         }
 
-        [HttpPut("update")]
+        [HttpPut]
         public IActionResult Update(Category category)
         {
             var updatedCategory = _service.UpdateEntity(category);

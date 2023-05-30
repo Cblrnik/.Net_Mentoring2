@@ -29,7 +29,6 @@ namespace CatalogService.API
         }
 
         [HttpGet]
-        [Route("find")]
         public IActionResult GetItem(int id)
         {
             var item = _service.GetEntity(id);
@@ -43,21 +42,21 @@ namespace CatalogService.API
             }
         }
 
-        [HttpPost("create")]
+        [HttpPost]
         public ActionResult Create(Item item)
         {
             _service.CreateEntity(item);
             return this.Ok();
         }
 
-        [HttpDelete("delete")]
+        [HttpDelete]
         public ActionResult Delete(int id)
         {
             _service.DeleteEntity(id);
             return this.Ok();
         }
 
-        [HttpPut("update")]
+        [HttpPut]
         public ActionResult Update(Item product)
         {
             _service.UpdateEntity(product);
