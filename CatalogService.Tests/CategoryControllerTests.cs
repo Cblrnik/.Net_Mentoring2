@@ -17,7 +17,7 @@ namespace CatalogService.Tests
         public async Task CreateCategory_WithAllParameters_Returns200Code()
         {
             var response = await TestClient.PostAsync(
-                "https://localhost:5001/api/Category/create",
+                "https://localhost:5001/api/Categories/",
                 new StringContent(JsonConvert.SerializeObject(new Category { CategoryName = "Test", Description = "TestDesc", Items = null }),
                     Encoding.UTF8, "application/json"));
 
@@ -34,7 +34,7 @@ namespace CatalogService.Tests
             {
                 var updatedCategory = new Category { CategoryId = 1, CategoryName = "Beverages", Items = null, Description = "Soft drinks, coffees, teas, beers, and ales" };
                 var requestContent = new StringContent(JsonConvert.SerializeObject(updatedCategory), Encoding.UTF8, "application/json");
-                var response = await TestClient.PutAsync("https://localhost:5001/api/Category/update", requestContent);
+                var response = await TestClient.PutAsync("https://localhost:5001/api/Categories/", requestContent);
 
                 response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             }
@@ -42,7 +42,7 @@ namespace CatalogService.Tests
             {
                 var updatedCategory = new Category { CategoryId = int.Parse(_idToDelete), CategoryName = "Test", Items = null, Description = "TestDesc" };
                 var requestContent = new StringContent(JsonConvert.SerializeObject(updatedCategory), Encoding.UTF8, "application/json");
-                var response = await TestClient.PutAsync("https://localhost:5001/api/Category/update", requestContent);
+                var response = await TestClient.PutAsync("https://localhost:5001/api/Categories/", requestContent);
 
                 response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
             }
@@ -52,7 +52,7 @@ namespace CatalogService.Tests
         [Order(2)]
         public async Task DeleteCategory_DeleteCreatedEntity_Returns200CodeIfIdExistElse400Code()
         {
-            var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, $"https://localhost:5001/api/Category/delete?id={_idToDelete}");
+            var deleteRequest = new HttpRequestMessage(HttpMethod.Delete, $"https://localhost:5001/api/Categories/id={_idToDelete}");
 
             var deleteResponse = await TestClient.SendAsync(deleteRequest);
 
@@ -68,7 +68,7 @@ namespace CatalogService.Tests
             var updatedCategory = new Category { CategoryId = int.Parse(_idToDelete ?? "0"), CategoryName = "Test", Items = null, Description = "TestDesc" };
             var category = System.Text.Json.JsonSerializer.Serialize(updatedCategory);
             var requestContent = new StringContent(category, Encoding.UTF8, "application/json");
-            var response = await TestClient.PutAsync("https://localhost:5001/api/Category/update", requestContent);
+            var response = await TestClient.PutAsync("https://localhost:5001/api/Categories/", requestContent);
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.NotFound);
         }
@@ -76,7 +76,7 @@ namespace CatalogService.Tests
         [Test]
         public async Task GetCategories_WithoutCount_ReturnsAllExistingCategories()
         {
-            var response = await TestClient.GetAsync("https://localhost:5001/api/Category/get");
+            var response = await TestClient.GetAsync("https://localhost:5001/api/Categories/");
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }
@@ -84,7 +84,7 @@ namespace CatalogService.Tests
         [Test]
         public async Task GetCategories_WithCount_ReturnsCountCategories()
         {
-            var response = await TestClient.GetAsync("https://localhost:5001/api/Category/get?count=5");
+            var response = await TestClient.GetAsync("https://localhost:5001/api/Categories/5");
 
             response.StatusCode.Should().Be(System.Net.HttpStatusCode.OK);
         }

@@ -7,16 +7,17 @@ namespace CatalogService.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class CategoryController : ControllerBase
+    public class CategoriesController : ControllerBase
     {
         private readonly ICategoryService _service;
 
-        public CategoryController(ICategoryService service)
+        public CategoriesController(ICategoryService service)
         {
             _service = service;
         }
 
         [HttpGet]
+        [Route("{count?}")]
         public IActionResult GetCategories(int? count)
         {
             if (count != null)
@@ -32,7 +33,7 @@ namespace CatalogService.API
         }
 
         [HttpGet]
-        [Route("id={id}")]
+        [Route("id={id:int}")]
         public IActionResult GetCategory(int id)
         {
             var category = _service.GetEntity(id);
@@ -54,6 +55,7 @@ namespace CatalogService.API
         }
 
         [HttpDelete]
+        [Route("id={id:int}")]
         public IActionResult Delete(int id)
         {
             _service.DeleteEntity(id);

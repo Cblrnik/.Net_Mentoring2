@@ -7,11 +7,11 @@ namespace CatalogService.API
 {
     [Route("api/[controller]")]
     [ApiController]
-    public class ItemController : ControllerBase
+    public class ItemsController : ControllerBase
     {
         readonly IItemService _service;
 
-        public ItemController(IItemService service)
+        public ItemsController(IItemService service)
         {
             _service = service;
         }
@@ -29,6 +29,7 @@ namespace CatalogService.API
         }
 
         [HttpGet]
+        [Route("id={id:int}")]
         public IActionResult GetItem(int id)
         {
             var item = _service.GetEntity(id);
@@ -50,6 +51,7 @@ namespace CatalogService.API
         }
 
         [HttpDelete]
+        [Route("id={id:int}")]
         public ActionResult Delete(int id)
         {
             _service.DeleteEntity(id);
